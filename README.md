@@ -32,6 +32,7 @@ Model | Augment | Training Loss | Testing Loss | Validation Acc | Depth | Filter
 Vanila tktcn | 0 | x | x | x | 3 | 25 | {128,256, 512} | 0.5 |SGD| 13951177 |
 tktcn+resnet9_gap | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.0 |SGD| 13950886 |
 tktcn+resnet9_gap_dropout | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.0 |SGD| 13950777 |
+tktcn+resnet9_gap_dropout_L2 | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 13974564 |
 
 
 ^ : difference between resnet versions
