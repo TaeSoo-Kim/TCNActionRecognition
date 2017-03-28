@@ -31,9 +31,12 @@ tktcn+resnet9_v3_gap_dropout | 0 | 0.9673 | 1.4405 | 0.677 | 9 | {8,16} | {32x2x
 Model | Augment | Training Loss | Testing Loss | Validation Acc | Depth | Filter Dim(s) | Layer Widths | Dropout | Opti | SLURM ID|Notes
 ---|:---:|:---:|:---:|:---:|:---:|:---:|:---: | :---: | :---: | :---: |--- |
 Vanila tktcn | 0 | x | x | x | 3 | 25 | {128,256, 512} | 0.5 |SGD|  |
-tktcn+resnet9_gap | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.0 |SGD|  |
+tktcn+resnet9_gap | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.0 |SGD| 14175241 |
 tktcn+resnet9_gap_dropout | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 14174425 |
 tktcn+resnet9_gap_dropout_L2 | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD|  |
+tktcn+resnet3_v4 | 0 | x | x | x | 3 | 8 | {150x3} | 0.5 |SGD| 14204710 |
+
+
 
 
 ^ : difference between resnet versions
@@ -41,5 +44,6 @@ tktcn+resnet9_gap_dropout_L2 | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.5 
   - resnet_v2: two convolutions per residual block (two stacked narrower conv blocks)
   - resnet_v2.2: three convolutions per residual block (three stacked same conv blocks)
   - resnet_v3: two convolutions of different filter lengths per residual block, not stacked (inception+resnet)
+  - resnet_v4: no relu, only visualization focus with tanh, BN+nonlin after merge, resblock only contains conv
 
 
