@@ -24,7 +24,7 @@ tktcn+resnet18_v2_gap | 0 | 0.8384 | 1.5117| 0.711 | 18 | 8 | {32x2x3,64x2x3,128
 tktcn+resnet9_v2.2_gap_dropout | 0 | 0.9105 | 1.4466| 0.705 | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 13882217 |
 tktcn+resnet9_v3_gap | 0 | 0.7708 | 1.5179 | 0.709 | 9 | {8,16} | {32x2x3,64x2x3,128x2x3} | 0.0 |SGD| 13870423 |
 tktcn+resnet9_v3_gap_dropout | 0 | 0.9673 | 1.4405 | 0.677 | 9 | {8,16} | {32x2x3,64x2x3,128x2x3} | 0.5 |SGD| 13885555 |
-
+tktcn+resnet3_v4 | 0 | x | x | x | 3 | 8 | {150x3} | 0.5 |SGD| 14205693 |
 
 
 ### NTURGDB Skeleton Cross View Validation
