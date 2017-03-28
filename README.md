@@ -17,7 +17,7 @@ tktcn+resnet9_dropout | 0 | 0.5551 | 2.4392 | 0.577| 9 | 8 | {64x3,128x3,256x3} 
 tktcn+resnet9_gap | 0 | 0.6109 | 1.4615| 0.720 | 9 | 8 | {64x3,128x3,256x3} | 0.0 |SGD| 13859174 |
 **tktcn+resnet9_gap_dropout** | 0 | 0.8100 | 1.3288 | **0.727** | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 13859234 |
 tktcn+resnet9_gap_aug | 1 | 0.8604 | 1.3948 | 0.723 | 9 | 8 | {64x3,128x3,256x3} | 0.0 |SGD| 13951341 |
-tktcn+resnet9_gap_aug_dropout | 1 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.3 |SGD| 14127062 |
+tktcn+resnet9_gap_aug_dropout | 1 | 1.400 | 1.3478 | 0.727 | 9 | 8 | {64x3,128x3,256x3} | 0.3 |SGD| 14127062 |
 tktcn+resnet18_gap_dropout | 0 | 0.8698 | 1.3130 | 0.722 | 18 | 8 | {32x6,64x6,128x6} | 0.5 |SGD| 13879610 |
 tktcn+resnet9_gap_dropout_tanh | 0 | 1.2466 | 1.4405| 0.681 | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 13860275 |
 tktcn+resnet18_v2_gap | 0 | 0.8384 | 1.5117| 0.711 | 18 | 8 | {32x2x3,64x2x3,128x2x3} | 0.0 |SGD| 13869079 |
@@ -32,7 +32,7 @@ Model | Augment | Training Loss | Testing Loss | Validation Acc | Depth | Filter
 ---|:---:|:---:|:---:|:---:|:---:|:---:|:---: | :---: | :---: | :---: |--- |
 Vanila tktcn | 0 | x | x | x | 3 | 25 | {128,256, 512} | 0.5 |SGD|  |
 tktcn+resnet9_gap | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.0 |SGD|  |
-tktcn+resnet9_gap_dropout | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.0 |SGD|  |
+tktcn+resnet9_gap_dropout | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 14174425 |
 tktcn+resnet9_gap_dropout_L2 | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD|  |
 
 
