@@ -24,16 +24,16 @@ tktcn+resnet18_v2_gap | 0 | 0.8384 | 1.5117| 0.711 | 18 | 8 | {32x2x3,64x2x3,128
 tktcn+resnet9_v2.2_gap_dropout | 0 | 0.9105 | 1.4466| 0.705 | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 13882217 |
 tktcn+resnet9_v3_gap | 0 | 0.7708 | 1.5179 | 0.709 | 9 | {8,16} | {32x2x3,64x2x3,128x2x3} | 0.0 |SGD| 13870423 |
 tktcn+resnet9_v3_gap_dropout | 0 | 0.9673 | 1.4405 | 0.677 | 9 | {8,16} | {32x2x3,64x2x3,128x2x3} | 0.5 |SGD| 13885555 |
-tktcn+resnet3_v4 | 0 | x | x | x | 3 | 8 | {150x3} | 0.5 |SGD| 14205693 |
+tktcn+resnet3_v4_dropout | 0 | x | x | x | 3 | 8 | {150x3} | 0.5 |SGD| 14205693 |
+tktcn+resnet3_v4 | 0 | x | x | x | 3 | 8 | {150x3} | 0.0 |SGD| 14206014 |
 
 
 ### NTURGDB Skeleton Cross View Validation
 Model | Augment | Training Loss | Testing Loss | Validation Acc | Depth | Filter Dim(s) | Layer Widths | Dropout | Opti | SLURM ID|Notes
 ---|:---:|:---:|:---:|:---:|:---:|:---:|:---: | :---: | :---: | :---: |--- |
-Vanila tktcn | 0 | x | x | x | 3 | 25 | {128,256, 512} | 0.5 |SGD|  |
+Vanila tktcn | 0 | x | x | x | 3 | 25 | {128,256, 512} | 0.5 |SGD| 14184708 |
 tktcn+resnet9_gap | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.0 |SGD| 14175241 |
 tktcn+resnet9_gap_dropout | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 14174425 |
-tktcn+resnet9_gap_dropout_L2 | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD|  |
 tktcn+resnet3_v4 | 0 | x | x | x | 3 | 8 | {150x3} | 0.5 |SGD| 14204710 |
 
 
