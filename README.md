@@ -31,9 +31,9 @@ tktcn+resnet3_v4 | 0 | x | x | x | 3 | 8 | {150x3} | 0.0 |SGD| 14206014 |
 ### NTURGDB Skeleton Cross View Validation
 Model | Augment | Training Loss | Testing Loss | Validation Acc | Depth | Filter Dim(s) | Layer Widths | Dropout | Opti | SLURM ID|Notes
 ---|:---:|:---:|:---:|:---:|:---:|:---:|:---: | :---: | :---: | :---: |--- |
-Vanila tktcn | 0 | x | x | x | 3 | 25 | {128,256, 512} | 0.5 |SGD| 14184708 |
-tktcn+resnet9_gap | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.0 |SGD| 14175241 |
-tktcn+resnet9_gap_dropout | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 14174425 |
+Vanila tktcn | 0 | 0.8279 | 1.0848 | 0.805 | 3 | 25 | {128,256, 512} | 0.5 |SGD| 14184708 |
+tktcn+resnet9_gap | 0 | 0.6173 | 1.0405 | 0.819 | 9 | 8 | {64x3,128x3,256x3} | 0.0 |SGD| 14175241 |
+tktcn+resnet9_gap_dropout | 0 | 0.7375 | 1.0234 | 0.811 | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 14174425 |
 tktcn+resnet3_v4 | 0 | x | x | x | 3 | 8 | {150x3} | 0.0 |SGD| 14206903 |
 tktcn+resnet3_v4_dropout | 0 | x | x | x | 3 | 8 | {150x3} | 0.5 |SGD| 14204710 |
 
@@ -41,7 +41,7 @@ tktcn+resnet3_v4_dropout | 0 | x | x | x | 3 | 8 | {150x3} | 0.5 |SGD| 14204710 
 ### NTURGDB Skeleton Cross Subject Raw Validation
 Model | Augment | Training Loss | Testing Loss | Validation Acc | Depth | Filter Dim(s) | Layer Widths | Dropout | Opti | SLURM ID|Notes
 ---|:---:|:---:|:---:|:---:|:---:|:---:|:---: | :---: | :---: | :---: |--- |
-tktcn_resnet9 | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 14239352 |
+**tktcn_resnet9** | 0 | 0.8401 | 1.2822 | **0.743** | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 14239352 |
 
 
 ^ : difference between resnet versions
