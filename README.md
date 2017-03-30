@@ -42,7 +42,7 @@ tktcn+resnet3_v4_dropout | 0 | x | x | x | 3 | 8 | {150x3} | 0.5 |SGD| 14204710 
 Model | Augment | Training Loss | Testing Loss | Validation Acc | Depth | Filter Dim(s) | Layer Widths | Dropout | Opti | SLURM ID|Notes
 ---|:---:|:---:|:---:|:---:|:---:|:---:|:---: | :---: | :---: | :---: |--- |
 **tktcn_resnet9** | 0 | 0.8401 | 1.2822 | **0.743** | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 14239352 |
-tktcn_resnet9_m0 | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 14353866 |
+tktcn_resnet9_m0 | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 519 |
 
 
 
