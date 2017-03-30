@@ -44,6 +44,7 @@ tktcn_resnet9_m0 | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 519 |
 Model | Augment | Training Loss | Testing Loss | Validation Acc | Depth | Filter Dim(s) | Layer Widths | Dropout | Opti | SLURM ID|Notes
 ---|:---:|:---:|:---:|:---:|:---:|:---:|:---: | :---: | :---: | :---: |--- |
 **tktcn_resnet9** | 0 | 0.8839 | 0.8993 | **0.831** | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 15353 |
+tktcn_resnet9_nomeansub | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 90994 |
 
 
 ^ : difference between resnet versions
