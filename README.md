@@ -39,6 +39,7 @@ Model | Augment | Training Loss | Testing Loss | Validation Acc | Depth | Filter
 ---|:---:|:---:|:---:|:---:|:---:|:---:|:---: | :---: | :---: | :---: |--- |
 **tktcn_resnet9** | 0 | 0.8401 | 1.2822 | **0.743** | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 14239352 |
 tktcn_resnet9_m0 | 0 | x | x | x | 9 | 8 | {64x3,128x3,256x3} | 0.5 |SGD| 519 |
+tktcn_resnet9_v3 | 0 | x | x | x | 9 | {8,16} | {64x3,128x3,256x3} | 0.5 |SGD| 136206 |
 
 ### NTURGDB Skeleton Cross View Raw Validation
 Model | Augment | Training Loss | Testing Loss | Validation Acc | Depth | Filter Dim(s) | Layer Widths | Dropout | Opti | SLURM ID|Notes
