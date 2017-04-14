@@ -1,3 +1,12 @@
+"""
+Train Res-TCN model NTURGBD skeleton dataset.
+Pre-reqs: GPU mode, TensorFlow backend with Keras, plus all standard python libs such as numpy, lmdb
+
+Tae Soo Kim
+April, 2017
+"""
+
+
 import Models
 from keras.utils import np_utils
 from keras.optimizers import RMSprop,SGD,Adam
@@ -10,20 +19,29 @@ import threading
 import os
 from keras.callbacks import ReduceLROnPlateau
 
-np.random.seed(seed=2)
 
+# seed 1234 is used for reproducibility
+np.random.seed(seed=1234)
 
+## raw means skeletons are not normalized as in the original Sharoudy et. al.
+raw = 1
 
-subject_split = 0                                                             ## CHECK THIS!!!!!!!!!
+## 0:CrossView, 1:CrossSubject
+subject_split = 1                                                             ## CHECK THIS!!!!!!!!!
+
 ## SET UP THE DATA
-#data_root = '/home-4/tkim60@jhu.edu/scratch/dev/nturgbd/data_300/'
 if subject_split:
-  data_root = '/home-4/tkim60@jhu.edu/scratch/dev/nturgbd/data/'   ## CHECK THIS!!!!!!!!!
+  if raw:
+    data_root = '/home-4/tkim60@jhu.edu/scratch/dev/nturgbd/data_raw/'        ## CHECK THIS!!!!!!!!!
+  else:
+    data_root = '/home-4/tkim60@jhu.edu/scratch/dev/nturgbd/data/'            ## CHECK THIS!!!!!!!!!
 else:
-  data_root = '/home-4/tkim60@jhu.edu/scratch/dev/nturgbd/data_cv/'   ## CHECK THIS!!!!!!!!!
+  if raw:
+    data_root = '/home-4/tkim60@jhu.edu/scratch/dev/nturgbd/data_cv_raw/'     ## CHECK THIS!!!!!!!!!
+  else:
+    data_root = '/home-4/tkim60@jhu.edu/scratch/dev/nturgbd/data_cv/'         ## CHECK THIS!!!!!!!!!
 
-
-#data_root = '/home/tk/dev/data/nturgbd/subjects_split_norm/'
+## LMDBs
 lmdb_file_train_x = os.path.join(data_root,'Xtrain_lmdb')
 lmdb_file_train_y = os.path.join(data_root,'Ytrain_lmdb')
 lmdb_file_test_x = os.path.join(data_root,'Xtest_lmdb')
@@ -35,14 +53,14 @@ lr = 0.01
 momentum = 0.9
 
 ## MODEL CHOICE
-# 0: no downsample, 1: downsample, 2: multiscale, 3:resnet, 4:resnet_gap, 5:resnet_v2_gap, 6:resnet_v3_gap
-model_choice = 1                                                              ## CHECK THIS!!!!!!!!!
-out_dir_name = 'cv_tktcn_Dr0.5_L3_F25_vanila'                              ## CHECK THIS!!!!!!!!!
+# 0: no downsample, 1: downsample, 2: multiscale, 3:resnet, 4:resnet_gap, 5:resnet_v2_gap, 6:resnet_v3_gap, 7:resnet_v4_gap
+model_choice = 6                                                              ## CHECK THIS!!!!!!!!!
+out_dir_name = 'tktcn_Dr0.5_L9_F8_resnet_v3_raw2'                             ## CHECK THIS!!!!!!!!!
 activation = "relu"                                                           ## CHECK THIS!!!!!!!!!
-optimizer = SGD(lr=lr, momentum=momentum, decay=0.0, nesterov=True)          ## CHECK THIS!!!!!!!!!
-#optimizer = Adam(lr=lr, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)   ## CHECK THIS!!!!!!!!!
+optimizer = SGD(lr=lr, momentum=momentum, decay=0.0, nesterov=True)           ## CHECK THIS!!!!!!!!!
+#optimizer = Adam(lr=lr, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)  ## CHECK THIS!!!!!!!!!
 dropout = 0.5                                                                 ## CHECK THIS!!!!!!!!!
-
+reg = l1(1.e-4)                                                               ## CHECK THIS!!!!!!!!!
 ## AUGMENTATION PARAMS
 augment = 0                                                                   ## CHECK THIS!!!!!!!!!
 shift_limit = 10
@@ -57,16 +75,23 @@ shuffle = 1
 if subject_split:
   samples_per_epoch = 33094
   samples_per_validation = 23185
+  if raw:
+    train_x_mean = 0.60351
+  else:
+    train_x_mean = 0.197766
 else:
   samples_per_epoch = 37462
   samples_per_validation = 18817
+  if raw:
+    train_x_mean = 0.582937574873
+  else:
+    train_x_mean = 0.237390121854
 
 if augment:
   num_training_samples = samples_per_epoch*4
 else:
   num_training_samples = samples_per_epoch
 
-#samples_per_validation = int(samples_per_epoch*0.2)
 initial_epoch = 0
 
 num_train_chunks = 18
@@ -82,7 +107,6 @@ n_nodes = [128,256,512]                                                       ##
 conv_len = 25
 feat_dim = 150
 
-train_x_mean = 0.197766
 
 n_classes = 60
 
@@ -90,16 +114,6 @@ n_classes = 60
 tr_chunks = list()
 te_chunks = list()
 
-"""
-for c in range(0,num_train_chunks):
-  loaded = dd.io.load(data_root+'Xy_train_%03d'%c+'.h5')
-  tr_chunks.append((loaded['X_train'],loaded['y_train']))
-  print 'loaded training', c
-for c in range(0,num_test_chunks):
-  loaded = dd.io.load(data_root+'Xy_test_%03d'%c+'.h5')
-  te_chunks.append((loaded['X_test'],loaded['y_test']))
-  print 'loaded testing', c
-"""
 
 class threadsafe_iter:
   """Takes an iterator/generator and makes it thread-safe by
@@ -298,7 +312,7 @@ def train():
          max_len=max_len,
          gap=0,
          dropout=dropout,
-         W_regularizer=l1(1.e-4),
+         W_regularizer=reg,
          activation=activation)
   model_multiscale = Models.TK_TCN_downsample_multiscale( 
          n_classes, 
@@ -306,7 +320,7 @@ def train():
          max_len=300,
          dropout=dropout,
          gap=0,
-         W_regularizer=l1(1.e-4), 
+         W_regularizer=reg, 
          activation=activation)
   model_resnet = Models.TK_TCN_resnet( 
          n_classes, 
@@ -314,7 +328,7 @@ def train():
          max_len=300,
          gap=0,
          dropout=dropout,
-         W_regularizer=l1(1.e-4),
+         W_regularizer=reg,
          activation=activation)
   model_resnet_gap = Models.TK_TCN_resnet( 
          n_classes, 
@@ -322,7 +336,7 @@ def train():
          max_len=300,
          gap=1,
          dropout=dropout,
-         W_regularizer=l1(1.e-4),
+         W_regularizer=reg,
          activation=activation)
   model_resnet_gap_v2 = Models.TK_TCN_resnet_v2( 
          n_classes, 
@@ -330,22 +344,27 @@ def train():
          max_len=300,
          gap=1,
          dropout=dropout,
-         W_regularizer=l1(1.e-4),
+         W_regularizer=reg,
          activation=activation)
-  model_resnet_gap_v3 = Models.TK_TCN_resnet_v2( 
+  model_resnet_gap_v3 = Models.TK_TCN_resnet_v3( 
          n_classes, 
          feat_dim,
          max_len=300,
          gap=1,
          dropout=dropout,
-         W_regularizer=l1(1.e-4),
+         W_regularizer=reg,
          activation=activation)
-  models = [model_vanila, model_downsample, model_multiscale, model_resnet,model_resnet_gap,model_resnet_gap_v2,model_resnet_gap_v3]
+  model_resnet_gap_v4 = Models.TK_TCN_resnet_v4( 
+         n_classes, 
+         feat_dim,
+         max_len=300,
+         gap=1,
+         dropout=dropout,
+         W_regularizer=reg,
+         activation=activation)
+  models = [model_vanila, model_downsample, model_multiscale, model_resnet,model_resnet_gap,model_resnet_gap_v2,model_resnet_gap_v3,model_resnet_gap_v4]
   model = models[model_choice]
 
-  #optimizer = RMSprop(lr=lr, rho=0.9, epsilon=1e-08,decay=0.0)
-  #optimizer = SGD(lr=lr, momentum=momentum, decay=0.0, nesterov=True)
-  #optimizer = Adam(lr=lr, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
   model.compile(loss=loss, 
                  optimizer=optimizer,  
                  metrics=['accuracy'])
@@ -367,17 +386,7 @@ def train():
                                 min_lr=0.0001)
 
   callbacks_list = [checkpoint,reduce_lr]
-  #Y_train = np_utils.to_categorical(y_train, n_classes)
-  #Y_test = np_utils.to_categorical(y_test, n_classes)
 
-  """
-  model.fit(X_train, 
-            y_train,
-            batch_size=batch_size,
-            nb_epoch=nb_epoch,
-            callbacks=callbacks_list,
-            validation_data=(X_test,y_test))
-  """
 
   model.fit_generator(nturgbd_train_datagen(augment),
                       samples_per_epoch=num_training_samples,
@@ -400,9 +409,7 @@ def compute_dataset_mean():
   lmdb_txn_y = lmdb_env_y.begin()
   lmdb_cursor_y = lmdb_txn_y.cursor()
   
-  #X = np.zeros((batch_size,max_len,feat_dim))
   X = []
-  #Y = np.zeros((batch_size,n_classes))
   batch_count = 0
 
   indices = range(0,samples_per_epoch)
@@ -434,6 +441,4 @@ def compute_dataset_mean():
 
 
 if __name__ == "__main__":
-  #compute_dataset_mean()
   train()
-  #compute_max_len()

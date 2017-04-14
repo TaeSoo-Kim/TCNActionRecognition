@@ -335,6 +335,7 @@ def TK_TCN_resnet(
   
   initial_conv_len = 8
   initial_conv_num = 64
+  """
   config = [ 
              [(1,8,64)],
              [(1,8,64)],
@@ -346,6 +347,28 @@ def TK_TCN_resnet(
              [(1,8,256)],
              [(1,8,256)],
            ]
+  """
+  config = [ 
+             [(1,8,64)],
+             [(1,8,64)],
+             [(1,8,64)],
+             [(1,8,64)],
+             [(1,8,64)],
+             [(1,8,64)],
+             [(2,8,128)],
+             [(1,8,128)],
+             [(1,8,128)],
+             [(1,8,128)],
+             [(1,8,128)],
+             [(1,8,128)],
+             [(2,8,256)],
+             [(1,8,256)],
+             [(1,8,256)],
+             [(1,8,256)],
+             [(1,8,256)],
+             [(1,8,256)],
+           ]
+
 
   input = Input(shape=(max_len,feat_dim))
   model = input
@@ -524,7 +547,7 @@ def TK_TCN_resnet_v3(
     ROW_AXIS = 2
     CHANNEL_AXIS = 1
   
-
+  
   config = [ 
              [[(1,8,32)],[(1,16,32)]],
              [[(1,8,32)],[(1,16,32)]],
@@ -536,6 +559,28 @@ def TK_TCN_resnet_v3(
              [[(1,8,128)],[(1,16,128)]],
              [[(1,8,128)],[(1,16,128)]],
            ]
+  """
+  config = [ 
+             [[(1,8,32)],[(1,16,32)]],
+             [[(1,8,32)],[(1,16,32)]],
+             [[(1,8,32)],[(1,16,32)]],
+             [[(1,8,32)],[(1,16,32)]],
+             [[(1,8,32)],[(1,16,32)]],
+             [[(1,8,32)],[(1,16,32)]],
+             [[(2,8,64)],[(2,16,64)]],
+             [[(1,8,64)],[(1,16,64)]],
+             [[(1,8,64)],[(1,16,64)]],
+             [[(1,8,64)],[(1,16,64)]],
+             [[(1,8,64)],[(1,16,64)]],
+             [[(1,8,64)],[(1,16,64)]],
+             [[(2,8,128)],[(2,16,128)]],
+             [[(1,8,128)],[(1,16,128)]],
+             [[(1,8,128)],[(1,16,128)]],
+             [[(1,8,128)],[(1,16,128)]],
+             [[(1,8,128)],[(1,16,128)]],
+             [[(1,8,128)],[(1,16,128)]],
+           ]
+  """
   initial_conv_len = 8
   initial_conv_num = 64
 
@@ -602,4 +647,78 @@ def TK_TCN_resnet_v3(
   model = Model(input=input, output=dense)
   return model
 
+def TK_TCN_resnet_v4(
+           n_classes, 
+           feat_dim,
+           max_len,
+           gap=1,
+           dropout=0.0,
+           W_regularizer=l1(1.e-4),
+           activation="relu"):
 
+  if K.image_dim_ordering() == 'tf':
+    ROW_AXIS = 1
+    CHANNEL_AXIS = 2
+  else:
+    ROW_AXIS = 2
+    CHANNEL_AXIS = 1
+  
+
+  config = [ 
+             [(1,8,150)],
+             [(1,8,150)],
+             [(1,8,150)],
+           ]
+  initial_conv_len = 8
+  initial_conv_num = 64
+
+  input = Input(shape=(max_len,feat_dim))
+  model = input
+
+  #model = Convolution1D(initial_conv_num, 
+  #                            initial_conv_len,
+  #                            init="he_normal",
+  #                            border_mode="same",
+  #                            subsample_length=1,
+  #                            W_regularizer=W_regularizer)(model)
+
+  for depth in range(0,len(config)):
+    blocks = []
+    for stride,filter_dim,num in config[depth]:
+      ## residual block
+      conv = Convolution1D(num, 
+                              filter_dim,
+                              init="he_normal",
+                              border_mode="same",
+                              subsample_length=stride,
+                              W_regularizer=W_regularizer)(model)
+
+      ## potential downsample
+      conv_shape = K.int_shape(conv)
+      model_shape = K.int_shape(model)
+      if conv_shape[CHANNEL_AXIS] != model_shape[CHANNEL_AXIS]:
+        model = Convolution1D(num, 
+                              1,
+                              init="he_normal",
+                              border_mode="same",
+                              subsample_length=stride,
+                              W_regularizer=W_regularizer)(model)
+
+      ## merge block
+      model = merge([model,conv],mode='sum',concat_axis=CHANNEL_AXIS)
+    bn = BatchNormalization(mode=0, axis=CHANNEL_AXIS)(model)
+    nonlin = Activation(activation)(bn)
+    model = Dropout(dropout)(nonlin)
+
+  if gap:
+    pool_window_shape = K.int_shape(model)
+    gap = AveragePooling1D(pool_window_shape[ROW_AXIS],
+                           stride=1)(model)
+    flatten = Flatten()(gap)
+  else:
+    flatten = Flatten()(model)
+  dense = Dense(output_dim=n_classes,
+        init="he_normal",
+        activation="softmax")(flatten)
+  model = Model(input=input, output=dense)
+  return model
