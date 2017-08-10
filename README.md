@@ -2,7 +2,7 @@
 Skeleton based action recognition models with TCN variants for learning interpretable representation.
 
 ## Articles
-The original BNMW CVPR2017 submission: https://128.84.21.199/abs/1704.04516v1
+BNMW CVPR2017 paper: https://128.84.21.199/abs/1704.04516v1
 
 ## Code
 - train.py: Contains the keras training routine.
