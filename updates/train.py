@@ -154,7 +154,7 @@ def nturgbd_train_datagen(augmentation=1):
   lmdb_txn_y = lmdb_env_y.begin()
   lmdb_cursor_y = lmdb_txn_y.cursor()
   
-  X = np.zeros((batch_size,max_len,feat_dim,1))
+  X = np.zeros((batch_size,max_len,feat_dim))
   Y = np.zeros((batch_size,n_classes))
   batch_count = 0
   while True:
@@ -234,7 +234,7 @@ def nturgbd_train_datagen(augmentation=1):
       if batch_count == batch_size:
         ret_x = X
         ret_y = Y
-        X = np.zeros((batch_size,max_len,feat_dim,1))
+        X = np.zeros((batch_size,max_len,feat_dim))
         Y = np.zeros((batch_size,n_classes))
         batch_count = 0
         yield (ret_x,ret_y)
@@ -284,7 +284,7 @@ def nturgbd_test_datagen():
       if batch_count == batch_size:
         ret_x = X
         ret_y = Y
-        X = np.zeros((batch_size,max_len,feat_dim,1))
+        X = np.zeros((batch_size,max_len,feat_dim))
         Y = np.zeros((batch_size,n_classes))
         batch_count = 0
         yield (ret_x,ret_y)
