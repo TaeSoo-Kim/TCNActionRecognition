@@ -10,7 +10,6 @@ max_activation_vis/
 skeleton_vis/
 tmp/
 videos/
-weights/
 max_img_vols.p
 slurm_outs/
 logs/
