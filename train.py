@@ -168,7 +168,7 @@ def nturgbd_train_datagen(augmentation=1):
     
     for index in indices:
       value = np.frombuffer(lmdb_cursor_x.get('{:0>8d}'.format(index)))
-      label = np.frombuffer(lmdb_cursor_y.get('{:0>8d}'.format(index)))
+      label = np.frombuffer(lmdb_cursor_y.get('{:0>8d}'.format(index)),dtype=np.float32)
 
       ## THIS IS MEAN SUBTRACTION
       x = value.reshape((max_len,feat_dim))
@@ -264,7 +264,7 @@ def nturgbd_test_datagen():
     batch_count = 0
     for index in indices:
       value = np.frombuffer(lmdb_cursor_x.get('{:0>8d}'.format(index)))
-      label = np.frombuffer(lmdb_cursor_y.get('{:0>8d}'.format(index)))
+      label = np.frombuffer(lmdb_cursor_y.get('{:0>8d}'.format(index)),dtype=np.float32)
       
       ## THIS IS MEAN SUBTRACTION
       x = value.reshape((max_len,feat_dim))
@@ -419,7 +419,7 @@ def compute_dataset_mean():
   total_sum = 0
   for index in indices:
     value = np.frombuffer(lmdb_cursor_x.get('{:0>8d}'.format(index)))
-    label = np.frombuffer(lmdb_cursor_y.get('{:0>8d}'.format(index)))
+    label = np.frombuffer(lmdb_cursor_y.get('{:0>8d}'.format(index)),dtype=np.float32)
     X.append(value)
     x = value.reshape((max_len,feat_dim))
     
